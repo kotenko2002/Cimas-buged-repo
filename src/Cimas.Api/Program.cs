@@ -1,3 +1,6 @@
+using Cimas.Application;
+using Cimas.Infrastructure;
+
 namespace Cimas.Api
 {
     public class Program
@@ -9,8 +12,15 @@ namespace Cimas.Api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddProblemDetails(); //?
+
+            builder.Services
+               .AddApplication()
+               .AddInfrastructure();
 
             var app = builder.Build();
+
+            app.UseExceptionHandler(); //?
 
             if (app.Environment.IsDevelopment())
             {

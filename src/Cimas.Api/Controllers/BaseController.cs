@@ -1,12 +1,20 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace Cimas.Api.Controllers
 {
     [ApiController]
     public class BaseController : ControllerBase
     {
+        protected readonly IMediator _mediator;
+
+        public BaseController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         protected IActionResult Problem(List<Error> errors)
         {
             if (errors.Count is 0)

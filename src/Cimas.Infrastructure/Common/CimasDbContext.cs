@@ -1,14 +1,15 @@
 ﻿using Cimas.Domain.Entities.Companies;
+using Cimas.Domain.Entities.Users;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace Cimas.Infrastructure.Common
 {
-    public class CimasDbContext : DbContext
+    public class CimasDbContext : IdentityDbContext<User>
     {
         public DbSet<Company> Companies { get; set; }
 
-        public CimasDbContext(DbContextOptions options) : base(options)
+        public CimasDbContext(DbContextOptions<CimasDbContext> options) : base(options)
         {
         }
 

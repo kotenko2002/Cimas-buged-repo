@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -19,10 +19,6 @@
     <ProjectReference Include="..\Cimas.Application\Cimas.Application.csproj" />
     <ProjectReference Include="..\Cimas.Contracts\Cimas.Contracts.csproj" />
     <ProjectReference Include="..\Cimas.Infrastructure\Cimas.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

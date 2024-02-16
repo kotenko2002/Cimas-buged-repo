@@ -19,7 +19,7 @@ namespace Cimas.Api.Controllers
             var command = new RegisterCommand(
                 request.Username,
                 request.Password,
-                request.Username);
+                request.Role);
 
             var loginResult = await _mediator.Send(command);
 

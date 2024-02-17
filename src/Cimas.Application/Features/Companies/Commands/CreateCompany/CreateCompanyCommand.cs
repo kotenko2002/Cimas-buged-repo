@@ -1,4 +1,4 @@
-﻿using Cimas.Domain.Entities.Companies;
+﻿using Cimas.Domain.Companies;
 using ErrorOr;
 using MediatR;
 

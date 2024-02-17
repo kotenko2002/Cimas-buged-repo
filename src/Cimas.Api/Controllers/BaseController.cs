@@ -1,12 +1,20 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace Cimas.Api.Controllers
 {
     [ApiController]
     public class BaseController : ControllerBase
     {
+        protected readonly IMediator _mediator;
+
+        public BaseController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         protected IActionResult Problem(List<Error> errors)
         {
             if (errors.Count is 0)
@@ -26,9 +34,11 @@ namespace Cimas.Api.Controllers
         {
             var statusCode = error.Type switch
             {
+                ErrorType.Failure => StatusCodes.Status400BadRequest,
                 ErrorType.Conflict => StatusCodes.Status409Conflict,
                 ErrorType.Validation => StatusCodes.Status400BadRequest,
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
+                ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError,
             };
 

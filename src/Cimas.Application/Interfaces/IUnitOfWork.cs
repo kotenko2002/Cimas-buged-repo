@@ -1,6 +1,4 @@
-﻿using Cimas.Application.Interfaces.Repositories;
-
-namespace Cimas.Application.Interfaces.Uow
+﻿namespace Cimas.Application.Interfaces
 {
     public interface IUnitOfWork
     {

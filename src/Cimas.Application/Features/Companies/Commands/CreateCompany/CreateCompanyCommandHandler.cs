@@ -1,5 +1,5 @@
-﻿using Cimas.Application.Interfaces.Uow;
-using Cimas.Domain.Entities.Companies;
+﻿using Cimas.Application.Interfaces;
+using Cimas.Domain.Companies;
 using ErrorOr;
 using MediatR;
 
@@ -14,12 +14,12 @@ namespace Cimas.Application.Features.Companies.Commands.CreateCompany
             _uow = uow;
         }
 
-        public async Task<ErrorOr<Company>> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Company>> Handle(CreateCompanyCommand command, CancellationToken cancellationToken)
         {
             var company = new Company()
             {
                 Id = Guid.NewGuid(),
-                Name = request.Name,
+                Name = command.Name,
             };
 
             await _uow.CompanyRepository.AddAsync(company);

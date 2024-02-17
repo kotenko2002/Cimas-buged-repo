@@ -1,30 +1,30 @@
 ﻿using Cimas.Application.Features.Companies.Commands.CreateCompany;
 using Cimas.Contracts.Companies;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cimas.Api.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class CompaniesController : BaseController
     {
-        private readonly IMediator _mediator;
-
-        public CompaniesController(IMediator mediator)
+        public CompaniesController(IMediator mediator) : base(mediator)
         {
-            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGym(CreateCompanyRequest request)
+        public async Task<IActionResult> CreateCompany(CreateCompanyRequest request)
         {
             var command = new CreateCompanyCommand(request.Name);
 
-            var createGymResult = await _mediator.Send(command);
+            var createCompanyResult = await _mediator.Send(command);
 
-            return createGymResult.Match(
+            return createCompanyResult.Match(
                 Ok,
-                Problem);
+                Problem
+            );
         }
     }
 }

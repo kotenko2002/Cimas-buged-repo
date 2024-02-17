@@ -1,9 +1,7 @@
-﻿using Cimas.Application.Interfaces.Repositories;
-using Cimas.Application.Interfaces.Uow;
+﻿using Cimas.Application.Interfaces;
 using Cimas.Infrastructure.Common;
-using Cimas.Infrastructure.Repositories;
 
-namespace Cimas.Infrastructure.Uow
+namespace Cimas.Infrastructure.Repositories
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {

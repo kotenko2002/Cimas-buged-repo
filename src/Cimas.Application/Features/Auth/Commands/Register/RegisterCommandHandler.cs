@@ -1,20 +1,24 @@
-﻿using Cimas.Domain.Entities.Users;
+﻿using Cimas.Domain.Users;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cimas.Application.Features.Auth.Commands.Register
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<Unit>>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<Success>>
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public RegisterCommandHandler(UserManager<User> userManager)
+        public RegisterCommandHandler(
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        public async Task<ErrorOr<Unit>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Success>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         {
             User existsUser = await _userManager.FindByNameAsync(command.Username);
             if (existsUser is not null)
@@ -38,10 +42,14 @@ namespace Cimas.Application.Features.Auth.Commands.Register
                     .ToList();
             }
 
-            // add check does role exists
-            //await _userManager.AddToRoleAsync(user, command.Role);
+            if(!await _roleManager.RoleExistsAsync(command.Role))
+            {
+                throw new InvalidOperationException("Role doesn't exists");
+            }
 
-            return Unit.Value;
+            await _userManager.AddToRoleAsync(user, command.Role);
+
+            return Result.Success;
         }
     }
 }

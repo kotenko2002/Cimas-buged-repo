@@ -1,6 +1,6 @@
-﻿using Cimas.Domain.Entities;
+﻿using Cimas.Domain;
 
-namespace Cimas.Application.Interfaces.Repositories
+namespace Cimas.Application.Interfaces
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {

@@ -1,4 +1,5 @@
 ﻿using Cimas.Application.Features.Auth.Commands.Login;
+using Cimas.Application.Features.Auth.Commands.RefreshTokens;
 using Cimas.Application.Features.Auth.Commands.Register;
 using Cimas.Contracts.Auth;
 using MediatR;
@@ -32,24 +33,27 @@ namespace Cimas.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            //TokensPairView tokens; <- return
             var command = new LoginCommand(request.Username, request.Password);
 
             var loginResult = await _mediator.Send(command);
 
             return loginResult.Match(
-                res => Ok(),
+                Ok,
                 Problem
             );
         }
 
-        //[HttpPost("refresh-tokens")]
-        //public async Task<IActionResult> RefreshTokens(RefreshTokensModel model)
-        //{
-        //    var descriptor = _mapper.Map<RefreshTokensDescriptor>(model);
-        //    TokensPairView newTokens = await _authService.RefreshTokensAsync(descriptor);
+        [HttpPost("refresh-tokens")]
+        public async Task<IActionResult> RefreshTokens(RefreshTokensRequest request)
+        {
+            var command = new RefreshTokensCommand(request.AccessToken, request.RefreshToken);
 
-        //    return Ok(newTokens);
-        //}
+            var refreshTokensResult = await _mediator.Send(command);
+
+            return refreshTokensResult.Match(
+                Ok,
+                Problem
+            );
+        }
     }
 }

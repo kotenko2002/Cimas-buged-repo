@@ -1,5 +1,5 @@
-﻿using Cimas.Domain.Entities.Companies;
-using Cimas.Domain.Entities.Users;
+﻿using Cimas.Domain.Companies;
+using Cimas.Domain.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

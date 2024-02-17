@@ -1,5 +1,5 @@
-﻿using Cimas.Application.Interfaces.Repositories;
-using Cimas.Domain.Entities;
+﻿using Cimas.Application.Interfaces;
+using Cimas.Domain;
 using Cimas.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 

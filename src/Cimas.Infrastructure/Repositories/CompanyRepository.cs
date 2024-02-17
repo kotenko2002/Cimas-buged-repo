@@ -1,6 +1,6 @@
-﻿using Cimas.Domain.Entities.Companies;
-using Cimas.Application.Interfaces.Repositories;
-using Cimas.Infrastructure.Common;
+﻿using Cimas.Infrastructure.Common;
+using Cimas.Domain.Companies;
+using Cimas.Application.Interfaces;
 
 namespace Cimas.Infrastructure.Repositories
 {

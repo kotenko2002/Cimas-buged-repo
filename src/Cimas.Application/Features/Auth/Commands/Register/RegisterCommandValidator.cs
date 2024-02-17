@@ -1,9 +1,5 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cimas.Domain.Users;
+using FluentValidation;
 
 namespace Cimas.Application.Features.Auth.Commands.Register
 {
@@ -11,9 +7,31 @@ namespace Cimas.Application.Features.Auth.Commands.Register
     {
         public RegisterCommandValidator()
         {
-            RuleFor(x => x.Username).NotEmpty();
-            RuleFor(x => x.Password).NotEmpty();
-            RuleFor(x => x.Role).NotEmpty();
+            RuleFor(x => x.Username)
+                .NotEmpty()
+                .MinimumLength(8);
+
+            RuleFor(x => x.Password)
+                .NotEmpty()
+                .MinimumLength(8);
+
+            RuleFor(x => x.Role)
+                .NotEmpty()
+                .Must(IsValidRole)
+                .WithMessage(GenerateNonValidRoleErrorMessage);
+        }
+
+        private bool IsValidRole(string role)
+            => Roles.GetRoles().Contains(role);
+
+        private string GenerateNonValidRoleErrorMessage(RegisterCommand command)
+        {
+            string[] roles = Roles.GetRoles()
+                .Select(role => $"'{role}'")
+                .ToArray();
+            string validRoles = $"{string.Join(", ", roles.Take(roles.Length - 1))} or {roles.Last()}";
+
+            return $"'Role' must be: {validRoles}. You entered '{command.Role}'.";
         }
     }
 }

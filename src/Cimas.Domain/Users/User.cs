@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Cimas.Domain.Entities.Users
+namespace Cimas.Domain.Users
 {
     public class User : IdentityUser
     {

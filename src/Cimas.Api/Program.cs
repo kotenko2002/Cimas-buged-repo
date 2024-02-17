@@ -12,15 +12,16 @@ namespace Cimas.Api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddProblemDetails(); //?
+            builder.Services.AddProblemDetails(); 
 
             builder.Services
-               .AddApplication()
-               .AddInfrastructure(builder.Configuration);
+                .AddPresentation(builder.Configuration)
+                .AddApplication()
+                .AddInfrastructure(builder.Configuration); 
 
             var app = builder.Build();
 
-            app.UseExceptionHandler(); //?
+            app.UseExceptionHandler();
 
             if (app.Environment.IsDevelopment())
             {
@@ -29,6 +30,7 @@ namespace Cimas.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
 

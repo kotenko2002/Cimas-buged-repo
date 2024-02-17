@@ -3,10 +3,13 @@ using Cimas.Domain.Users;
 using Cimas.Infrastructure.Auth;
 using Cimas.Infrastructure.Common;
 using Cimas.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Cimas.Infrastructure
 {
@@ -16,7 +19,9 @@ namespace Cimas.Infrastructure
         {
             services
                 .AddDatabaseServices(configuration)
-                .AddScoped<IUnitOfWork, UnitOfWork>();
+                .AddAuthScheme(configuration);
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services
                 .Configure<JwtConfig>(configuration.GetSection(JwtConfig.Section))
@@ -32,6 +37,35 @@ namespace Cimas.Infrastructure
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<CimasDbContext>()
                 .AddDefaultTokenProviders();
+
+            return services;
+        }
+
+        public static IServiceCollection AddAuthScheme(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero,
+
+                    ValidAudience = configuration["Jwt:ValidAudience"],
+                    ValidIssuer = configuration["Jwt:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]))
+                };
+            });
 
             return services;
         }

@@ -1,10 +1,12 @@
 ﻿using Cimas.Application.Features.Companies.Commands.CreateCompany;
 using Cimas.Contracts.Companies;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cimas.Api.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class CompaniesController : BaseController
     {

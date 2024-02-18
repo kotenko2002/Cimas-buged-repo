@@ -1,7 +1,4 @@
-﻿using Cimas.Domain.Users;
-using System.IdentityModel.Tokens.Jwt;
-
-namespace Cimas.Domain.Auth
+﻿namespace Cimas.Domain.Auth
 {
     public class TokensPair
     {

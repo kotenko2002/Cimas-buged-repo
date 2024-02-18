@@ -8,11 +8,11 @@ namespace Cimas.Application.Features.Auth.Commands.Register
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<Success>>
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
         public RegisterCommandHandler(
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole<Guid>> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;

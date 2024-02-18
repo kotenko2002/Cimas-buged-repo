@@ -8,17 +8,17 @@ namespace Cimas.Api.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
-        public RolesController(RoleManager<IdentityRole> roleManager)
+        public RolesController(RoleManager<IdentityRole<Guid>> roleManager)
             => _roleManager = roleManager;
 
         [HttpPost]
-        public async Task AddRolesToDb()
+        public async Task AddRolesToDb() 
         {
             foreach (var role in Roles.GetRoles())
             {
-                await _roleManager.CreateAsync(new IdentityRole(role));
+                await _roleManager.CreateAsync(new IdentityRole<Guid>(role));
             }
         }
     }

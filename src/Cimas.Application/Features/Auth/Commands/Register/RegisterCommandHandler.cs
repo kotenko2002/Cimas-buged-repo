@@ -1,4 +1,5 @@
-﻿using Cimas.Domain.Users;
+﻿using Cimas.Application.Interfaces;
+using Cimas.Domain.Users;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -9,17 +10,26 @@ namespace Cimas.Application.Features.Auth.Commands.Register
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+        private readonly IUnitOfWork _uow;
 
         public RegisterCommandHandler(
             UserManager<User> userManager,
-            RoleManager<IdentityRole<Guid>> roleManager)
+            RoleManager<IdentityRole<Guid>> roleManager,
+            IUnitOfWork uow)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _uow = uow;
         }
 
         public async Task<ErrorOr<Success>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         {
+            var company = await _uow.CompanyRepository.GetByIdAsync(command.CompanyId);
+            if(company is null)
+            {
+                return Error.NotFound(description: "Company with such id doesn't exist");
+            }
+
             User existsUser = await _userManager.FindByNameAsync(command.Username);
             if (existsUser is not null)
             {
@@ -28,6 +38,7 @@ namespace Cimas.Application.Features.Auth.Commands.Register
 
             var user = new User()
             {
+                Company = company,
                 UserName = command.Username,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
@@ -37,7 +48,7 @@ namespace Cimas.Application.Features.Auth.Commands.Register
             {
                 return result.Errors
                     .Select(e => Error.Validation(
-                        code: e.Code,
+                        code: "Password",
                         description: e.Description))
                     .ToList();
             }

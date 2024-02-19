@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -20,6 +22,10 @@
     <ProjectReference Include="..\Cimas.Application\Cimas.Application.csproj" />
     <ProjectReference Include="..\Cimas.Contracts\Cimas.Contracts.csproj" />
     <ProjectReference Include="..\Cimas.Infrastructure\Cimas.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Mapping\" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,4 @@
 ﻿namespace Cimas.Contracts.Auth
 {
-    public class LoginRequest
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
+    public record LoginRequest(string Username, string Password);
 }

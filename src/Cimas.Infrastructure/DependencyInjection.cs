@@ -30,7 +30,7 @@ namespace Cimas.Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddIdentity<User, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<CimasDbContext>()
@@ -41,7 +41,7 @@ namespace Cimas.Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddAuthScheme(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddAuthScheme(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(options =>
             {

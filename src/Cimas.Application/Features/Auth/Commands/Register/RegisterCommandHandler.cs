@@ -27,7 +27,7 @@ namespace Cimas.Application.Features.Auth.Commands.Register
             var company = await _uow.CompanyRepository.GetByIdAsync(command.CompanyId);
             if(company is null)
             {
-                return Error.NotFound(description: "Company with such id doesn't exist");
+                return Error.NotFound(description: "Company with such id does not exist");
             }
 
             User existsUser = await _userManager.FindByNameAsync(command.Username);

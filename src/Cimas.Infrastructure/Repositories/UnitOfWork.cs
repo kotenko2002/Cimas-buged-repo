@@ -8,12 +8,14 @@ namespace Cimas.Infrastructure.Repositories
         private readonly CimasDbContext _context;
 
         public ICompanyRepository CompanyRepository { get; }
+        public ICinemaRepository CinemaRepository { get; }
 
         public UnitOfWork(CimasDbContext context)
         {
             _context = context;
 
             CompanyRepository = new CompanyRepository(_context);
+            CinemaRepository = new CinemaRepository(_context);
         }
 
         public async Task CompleteAsync()

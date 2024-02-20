@@ -2,25 +2,39 @@
 using Cimas.Application.Features.Auth.Commands.RefreshTokens;
 using Cimas.Application.Features.Auth.Commands.Register;
 using Cimas.Contracts.Auth;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cimas.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("auth")]
     public class AuthController : BaseController
     {
-        public AuthController(IMediator mediator) : base(mediator)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public AuthController(
+            IMediator mediator,
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor
+        ) : base(mediator, mapper)
         {
+            _httpContextAccessor = httpContextAccessor;
         }
 
+        /*
+        * TODO: 
+        * 
+        * 1) impl another register endpoint for adding new workers,
+        * check userId from jwt token and is user Owner
+        * 
+        * 2) edit current register endpoint logic. Make sure that
+        * company doesnt have any user
+        */
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
-            var command = new RegisterCommand(
-                request.Username,
-                request.Password,
-                request.Role);
+            var command = _mapper.Map<RegisterCommand>(request);
 
             var loginResult = await _mediator.Send(command);
 
@@ -31,9 +45,9 @@ namespace Cimas.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            var command = new LoginCommand(request.Username, request.Password);
+            var command = _mapper.Map<LoginCommand>(request);
 
             var loginResult = await _mediator.Send(command);
 
@@ -46,7 +60,7 @@ namespace Cimas.Api.Controllers
         [HttpPost("refresh-tokens")]
         public async Task<IActionResult> RefreshTokens(RefreshTokensRequest request)
         {
-            var command = new RefreshTokensCommand(request.AccessToken, request.RefreshToken);
+            var command = _mapper.Map<RefreshTokensCommand>(request);
 
             var refreshTokensResult = await _mediator.Send(command);
 

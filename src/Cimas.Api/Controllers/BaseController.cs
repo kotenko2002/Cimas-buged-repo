@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using MapsterMapper;
 
 namespace Cimas.Api.Controllers
 {
@@ -9,10 +10,14 @@ namespace Cimas.Api.Controllers
     public class BaseController : ControllerBase
     {
         protected readonly IMediator _mediator;
+        protected readonly IMapper _mapper;
 
-        public BaseController(IMediator mediator)
+        public BaseController(
+            IMediator mediator,
+            IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         protected IActionResult Problem(List<Error> errors)

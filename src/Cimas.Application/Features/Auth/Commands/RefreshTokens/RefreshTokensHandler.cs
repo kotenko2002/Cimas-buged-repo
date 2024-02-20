@@ -21,12 +21,10 @@ namespace Cimas.Application.Features.Auth.Commands.RefreshTokens
             _jwtTokensService = jwtTokensService;
         }
 
-        public async Task<ErrorOr<TokensPair>> Handle(RefreshTokensCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<TokensPair>> Handle(RefreshTokensCommand command, CancellationToken cancellationToken)
         {
-            string accessToken = request.AccessToken;
-            string refreshToken = request.RefreshToken;
-
-            ErrorOr<ClaimsPrincipal> getPrincipalResult = _jwtTokensService.GetPrincipalFromExpiredToken(accessToken);
+            ErrorOr<ClaimsPrincipal> getPrincipalResult = 
+                _jwtTokensService.GetPrincipalFromExpiredToken(command.AccessToken);
             if(getPrincipalResult.IsError)
             {
                 return getPrincipalResult.Errors;
@@ -34,7 +32,7 @@ namespace Cimas.Application.Features.Auth.Commands.RefreshTokens
 
             string username = getPrincipalResult.Value.Identity.Name;
             User user = await _userManager.FindByNameAsync(username);
-            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            if (user == null || user.RefreshToken != command.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
                 return Error.Failure(description: "Invalid access token or refresh token");
             }

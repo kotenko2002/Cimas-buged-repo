@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cimas.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("dev/roles")]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -18,7 +18,10 @@ namespace Cimas.Api.Controllers
         {
             foreach (var role in Roles.GetRoles())
             {
-                await _roleManager.CreateAsync(new IdentityRole<Guid>(role));
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole<Guid>(role));
+                }
             }
         }
     }

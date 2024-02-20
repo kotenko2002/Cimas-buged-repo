@@ -1,5 +1,6 @@
 using Cimas.Application;
 using Cimas.Infrastructure;
+using Mapster;
 
 namespace Cimas.Api
 {
@@ -9,13 +10,8 @@ namespace Cimas.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddProblemDetails(); 
-
             builder.Services
-                .AddPresentation(builder.Configuration)
+                .AddPresentation()
                 .AddApplication()
                 .AddInfrastructure(builder.Configuration); 
 

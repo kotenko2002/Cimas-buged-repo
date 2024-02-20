@@ -1,11 +1,12 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Mapster;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Cimas.Api
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddPresentation(this IServiceCollection services)
         {
             services.AddControllers();
 
@@ -13,12 +14,13 @@ namespace Cimas.Api
                 .AddHttpContextAccessor()
                 .AddEndpointsApiExplorer()
                 .AddSwagger()
-                .AddProblemDetails();
+                .AddProblemDetails()
+                .AddMapster();
 
             return services;
         }
 
-        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        private static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             return services.AddSwaggerGen(options =>
             {

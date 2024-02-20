@@ -9,6 +9,6 @@ namespace Cimas.Application.Interfaces
         Task RemoveAsync(TEntity entity);
         Task RemoveRangeAsync(IEnumerable<TEntity> entities);
         Task<IEnumerable<TEntity>> GetAllAsync();
-        Task<TEntity> GetByIdAsync(int id);
+        Task<TEntity> GetByIdAsync(Guid id);
     }
 }

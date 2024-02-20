@@ -10,11 +10,11 @@ namespace Cimas.Application.Features.Auth.Commands.RefreshTokens
 {
     internal class RefreshTokensHandler : IRequestHandler<RefreshTokensCommand, ErrorOr<TokensPair>>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly ICustomUserManager _userManager;
         private readonly IJwtTokensService _jwtTokensService;
 
         public RefreshTokensHandler(
-            UserManager<User> userManager,
+            ICustomUserManager userManager,
             IJwtTokensService jwtTokensService)
         {
             _userManager = userManager;

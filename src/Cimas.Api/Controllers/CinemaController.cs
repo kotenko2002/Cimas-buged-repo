@@ -11,7 +11,7 @@ using Cimas.Application.Features.Cinemas.Commands.DeleteCinema;
 
 namespace Cimas.Api.Controllers
 {
-    [Route("cinemas"), Authorize]
+    [Route("cinemas")/*, Authorize*/]
     public class CinemaController : BaseController
     {
         public CinemaController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -31,55 +31,55 @@ namespace Cimas.Api.Controllers
             );
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCinema(int id)
-        {
-            var command = new GetCinemaQuery { Id = id };
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetCinema(int id)
+        //{
+        //    var command = new GetCinemaQuery { Id = id };
 
-            var getCinemaResult = await _mediator.Send(command);
+        //    var getCinemaResult = await _mediator.Send(command);
 
-            return getCinemaResult.Match(
-                Ok,
-                Problem
-            );
-        }
+        //    return getCinemaResult.Match(
+        //        Ok,
+        //        Problem
+        //    );
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllCinema()
-        {
-            var command = new GetAllCinemaQuery();
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllCinema()
+        //{
+        //    var command = new GetAllCinemaQuery();
 
-            var getCinemasResult = await _mediator.Send(command);
+        //    var getCinemasResult = await _mediator.Send(command);
 
-            return getCinemasResult.Match(
-                Ok,
-                Problem
-            );
-        }
+        //    return getCinemasResult.Match(
+        //        Ok,
+        //        Problem
+        //    );
+        //}
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCinema(int id, UpdateCinemaRequest request)
-        {
-            var command = _mapper.Map<UpdateCinemaCommand>(request);
-            command.Id = id;
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> UpdateCinema(int id, UpdateCinemaRequest request)
+        //{
+        //    var command = _mapper.Map<UpdateCinemaCommand>(request);
+        //    command.Id = id;
 
-            var updateCinemaResult = await _mediator.Send(command);
+        //    var updateCinemaResult = await _mediator.Send(command);
 
-            return updateCinemaResult.Match(
-                Ok,
-                Problem
-            );
-        }
+        //    return updateCinemaResult.Match(
+        //        Ok,
+        //        Problem
+        //    );
+        //}
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCinema(int id)
+        public async Task<IActionResult> DeleteCinema(Guid id)
         {
-            var command = new DeleteCinemaCommand { Id = id };
+            var command = new DeleteCinemaCommand(Guid.Parse("75002AA9-9881-40FE-E31F-08DC318EE53E"), id);
 
             var deleteCinemaResult = await _mediator.Send(command);
 
             return deleteCinemaResult.Match(
-                Ok,
+                res => Ok(),
                 Problem
             );
         }

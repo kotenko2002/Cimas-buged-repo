@@ -10,11 +10,11 @@ namespace Cimas.Application.Features.Cinemas.Commands.DeleteCinema
     public class DeleteCinemaCommandHandler : IRequestHandler<DeleteCinemaCommand, ErrorOr<Success>>
     {
         private readonly IUnitOfWork _uow;
-        private readonly UserManager<User> _userManager;
+        private readonly ICustomUserManager _userManager;
 
         public DeleteCinemaCommandHandler(
             IUnitOfWork uow,
-            UserManager<User> userManager)
+            ICustomUserManager userManager)
         {
             _uow = uow;
             _userManager = userManager;
@@ -22,7 +22,7 @@ namespace Cimas.Application.Features.Cinemas.Commands.DeleteCinema
 
         public async Task<ErrorOr<Success>> Handle(DeleteCinemaCommand command, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(command.CinemaId.ToString());
+            var user = await _userManager.FindByIdAsync(command.UserId.ToString());
             if(user is null)
             {
                 return Error.NotFound(description: "User with such id does not exist");
@@ -33,7 +33,7 @@ namespace Cimas.Application.Features.Cinemas.Commands.DeleteCinema
                 return Error.Unauthorized(description: "You do not have the necessary permissions to perform this action");
             }
 
-
+            return Result.Success;
         }
     }
 }

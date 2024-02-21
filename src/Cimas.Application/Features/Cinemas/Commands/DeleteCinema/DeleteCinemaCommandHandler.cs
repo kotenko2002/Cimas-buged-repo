@@ -28,10 +28,15 @@ namespace Cimas.Application.Features.Cinemas.Commands.DeleteCinema
                 return Error.NotFound(description: "User with such id does not exist");
             }
 
-            if (!await _userManager.IsInRoleAsync(user, Roles.Owner))
+            var cinema = await _uow.CinemaRepository.GetByIdAsync(command.CinemaId);
+            if (!await _userManager.IsInRoleAsync(user, Roles.Owner)
+                || user.CompanyId != cinema.Id)
             {
                 return Error.Unauthorized(description: "You do not have the necessary permissions to perform this action");
             }
+
+            await _uow.CinemaRepository.RemoveAsync(cinema);
+            await _uow.CompleteAsync();
 
             return Result.Success;
         }

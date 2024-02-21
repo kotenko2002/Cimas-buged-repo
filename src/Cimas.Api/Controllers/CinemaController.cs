@@ -4,12 +4,14 @@ using MapsterMapper;
 using MediatR;
 using Cimas.Contracts.Cinemas;
 using Cimas.Application.Features.Cinemas.Commands.CreateCinema;
-using Cimas.Application.Features.Cinemas.Queries.GetCinema;
+using Cimas.Application.Features.Cinemas.Queries.GetCinemaById;
 using Cimas.Application.Features.Cinemas.Queries.GetAllCinemas;
 using Cimas.Application.Features.Cinemas.Commands.UpdateCinema;
 using Cimas.Application.Features.Cinemas.Commands.DeleteCinema;
 using Cimas.Api.Common.Extensions;
 using Mapster;
+using Cimas.Domain.Cinemas;
+using ErrorOr;
 
 namespace Cimas.Api.Controllers
 {
@@ -30,12 +32,17 @@ namespace Cimas.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCinema(CreateCinemaRequest request)
         {
-            var command = _mapper.Map<CreateCinemaCommand>(request);
+            ErrorOr<Guid> userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
+            if (userIdResult.IsError)
+            {
+                return Problem(userIdResult.Errors);
+            }
 
-            var createCinemaResult = await _mediator.Send(command);
+            var command = (userIdResult.Value, request).Adapt<CreateCinemaCommand>();
+            ErrorOr<Cinema> createCinemaResult = await _mediator.Send(command);
 
             return createCinemaResult.Match(
-                Ok,
+                cinema => Ok(cinema.Adapt<GetCinemaResponse>()),
                 Problem
             );
         }
@@ -43,18 +50,17 @@ namespace Cimas.Api.Controllers
         [HttpGet("{cinemaId}")]
         public async Task<IActionResult> GetCinema(Guid cinemaId)
         {
-            var userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
+            ErrorOr<Guid> userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
             if(userIdResult.IsError)
             {
                 return Problem(userIdResult.Errors);
             }
 
             var command = new GetCinemaQuery(userIdResult.Value, cinemaId);
-
-            var getCinemaResult = await _mediator.Send(command);
+            ErrorOr<Cinema> getCinemaResult = await _mediator.Send(command);
 
             return getCinemaResult.Match(
-                Ok,
+                cinema => Ok(cinema.Adapt<GetCinemaResponse>()),
                 Problem
             );
         }
@@ -62,17 +68,17 @@ namespace Cimas.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCinema()
         {
-            var userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
+            ErrorOr<Guid> userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
             if (userIdResult.IsError)
             {
                 return Problem(userIdResult.Errors);
             }
-            var command = new GetAllCinemaQuery(userIdResult.Value);
 
-            var getCinemasResult = await _mediator.Send(command);
+            var command = new GetAllCinemaQuery(userIdResult.Value);
+            ErrorOr<List<Cinema>> getCinemasResult = await _mediator.Send(command);
 
             return getCinemasResult.Match(
-                Ok,
+                cinemas => Ok(cinemas.Adapt<List<GetCinemaResponse>>()),
                 Problem
             );
         }
@@ -80,15 +86,14 @@ namespace Cimas.Api.Controllers
         [HttpPut("{cinemaId}")]
         public async Task<IActionResult> UpdateCinema(Guid cinemaId, UpdateCinemaRequest request)
         {
-            var userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
+            ErrorOr<Guid> userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
             if (userIdResult.IsError)
             {
                 return Problem(userIdResult.Errors);
             }
 
             var command = (userIdResult.Value, cinemaId, request).Adapt<UpdateCinemaCommand>();
-
-            var updateCinemaResult = await _mediator.Send(command);
+            ErrorOr<Success> updateCinemaResult = await _mediator.Send(command);
 
             return updateCinemaResult.Match(
                 res => Ok(),
@@ -96,25 +101,22 @@ namespace Cimas.Api.Controllers
             );
         }
 
-        //[HttpDelete("{cinemaId}")]
-        //public async Task<IActionResult> DeleteCinema(Guid cinemaId)
-        //{
-        //    var userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
-        //    if (userIdResult.IsError)
-        //    {
-        //        return Problem(userIdResult.Errors);
-        //    }
+        [HttpDelete("{cinemaId}")]
+        public async Task<IActionResult> DeleteCinema(Guid cinemaId)
+        {
+            ErrorOr<Guid> userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
+            if (userIdResult.IsError)
+            {
+                return Problem(userIdResult.Errors);
+            }
 
-        //    var command = new DeleteCinemaCommand(Guid.Parse("75002AA9-9881-40FE-E31F-08DC318EE53E"), cinemaId);// ???
-        //    command.CinemaId = cinemaId;
-        //    command.UserId = userIdResult.Value;
+            var command = new DeleteCinemaCommand(userIdResult.Value, cinemaId);
+            ErrorOr<Success> deleteCinemaResult = await _mediator.Send(command);
 
-        //    var deleteCinemaResult = await _mediator.Send(command);
-
-        //    return deleteCinemaResult.Match(
-        //        res => Ok(),
-        //        Problem
-        //    );
-        //}
+            return deleteCinemaResult.Match(
+                res => Ok(),
+                Problem
+            );
+        }
     }
 }

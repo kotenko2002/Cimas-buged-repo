@@ -2,9 +2,8 @@
 using Cimas.Domain.Cinemas;
 using ErrorOr;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
-namespace Cimas.Application.Features.Cinemas.Queries.GetCinema
+namespace Cimas.Application.Features.Cinemas.Queries.GetCinemaById
 {
     public class GetCinemaQueryHandler : IRequestHandler<GetCinemaQuery, ErrorOr<Cinema>>
     {
@@ -27,7 +26,18 @@ namespace Cimas.Application.Features.Cinemas.Queries.GetCinema
                 return Error.NotFound(description: "User with such id does not exist");
             }
 
-            return await _uow.CinemaRepository.GetByIdAsync(query.CinemaId);
+            var cinema = await _uow.CinemaRepository.GetByIdAsync(query.CinemaId);
+            if (cinema is null)
+            {
+                return Error.NotFound(description: "Cinema with such id does not exist");
+            }
+
+            if (user.CompanyId != cinema.CompanyId)
+            {
+                return Error.Unauthorized(description: "You do not have the necessary permissions to perform this action");
+            }
+
+            return cinema;
         }
     }
 }

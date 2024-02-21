@@ -4,5 +4,7 @@ using MediatR;
 
 namespace Cimas.Application.Features.Cinemas.Queries.GetAllCinemas
 {
-    public record GetAllCinemaQuery(Guid UserId) : IRequest<ErrorOr<List<Cinema>>>;
+    public record GetAllCinemaQuery(
+        Guid UserId
+    ) : IRequest<ErrorOr<List<Cinema>>>;
 }

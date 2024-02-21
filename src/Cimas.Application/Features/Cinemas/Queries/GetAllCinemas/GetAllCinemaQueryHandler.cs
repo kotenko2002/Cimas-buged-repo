@@ -1,6 +1,5 @@
 ﻿using Cimas.Application.Interfaces;
 using Cimas.Domain.Cinemas;
-using Cimas.Domain.Users;
 using ErrorOr;
 using MediatR;
 
@@ -25,6 +24,11 @@ namespace Cimas.Application.Features.Cinemas.Queries.GetAllCinemas
             if (user is null)
             {
                 return Error.NotFound(description: "User with such id does not exist");
+            }
+
+            if (user.CompanyId == Guid.Empty)
+            {
+                return Error.Failure(description: "User is not linked to any company");
             }
 
             return await _uow.CinemaRepository.GetCinemasByCompanyIdAsync(user.CompanyId);

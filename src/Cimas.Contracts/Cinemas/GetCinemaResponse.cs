@@ -1,6 +1,7 @@
 ﻿namespace Cimas.Contracts.Cinemas
 {
-    public record UpdateCinemaRequest(
+    public record GetCinemaResponse(
+        Guid Id,
         string Name,
         string Adress
     );

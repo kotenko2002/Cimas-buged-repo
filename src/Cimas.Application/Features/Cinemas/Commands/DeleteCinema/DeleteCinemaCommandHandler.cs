@@ -29,8 +29,12 @@ namespace Cimas.Application.Features.Cinemas.Commands.DeleteCinema
             }
 
             var cinema = await _uow.CinemaRepository.GetByIdAsync(command.CinemaId);
-            if (!await _userManager.IsInRoleAsync(user, Roles.Owner)
-                || user.CompanyId != cinema.Id)
+            if (cinema is null)
+            {
+                return Error.NotFound(description: "Cinema with such id does not exist");
+            }
+
+            if (user.CompanyId != cinema.CompanyId)
             {
                 return Error.Unauthorized(description: "You do not have the necessary permissions to perform this action");
             }

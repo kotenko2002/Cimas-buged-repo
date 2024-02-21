@@ -2,7 +2,7 @@
 using ErrorOr;
 using MediatR;
 
-namespace Cimas.Application.Features.Cinemas.Queries.GetCinema
+namespace Cimas.Application.Features.Cinemas.Queries.GetCinemaById
 {
     public record GetCinemaQuery(
         Guid UserId,

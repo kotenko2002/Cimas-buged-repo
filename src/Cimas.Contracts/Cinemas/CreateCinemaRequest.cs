@@ -1,4 +1,7 @@
 ﻿namespace Cimas.Contracts.Cinemas
 {
-    public record CreateCinemaRequest(string Name, string Adress);
+    public record CreateCinemaRequest(
+        string Name,
+        string Adress
+    );
 }

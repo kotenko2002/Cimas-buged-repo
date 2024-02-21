@@ -5,6 +5,7 @@ namespace Cimas.Application.Interfaces
 {
     public interface ICustomUserManager
     {
+        #region Base
         Task<User> FindByIdAsync(string userId);
         Task<bool> IsInRoleAsync(User user, string role);
         Task<User> FindByNameAsync(string userName);
@@ -13,5 +14,6 @@ namespace Cimas.Application.Interfaces
         Task<bool> CheckPasswordAsync(User user, string password);
         Task<IdentityResult> UpdateAsync(User user);
         Task<IList<string>> GetRolesAsync(User user);
+        #endregion
     }
 }

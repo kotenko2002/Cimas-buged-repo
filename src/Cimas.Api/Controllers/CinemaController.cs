@@ -66,7 +66,7 @@ namespace Cimas.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCinema()
+        public async Task<IActionResult> GetAllCinemas()
         {
             ErrorOr<Guid> userIdResult = _httpContextAccessor.HttpContext.User.GetUserId();
             if (userIdResult.IsError)
@@ -74,7 +74,7 @@ namespace Cimas.Api.Controllers
                 return Problem(userIdResult.Errors);
             }
 
-            var command = new GetAllCinemaQuery(userIdResult.Value);
+            var command = new GetAllCinemasQuery(userIdResult.Value);
             ErrorOr<List<Cinema>> getCinemasResult = await _mediator.Send(command);
 
             return getCinemasResult.Match(

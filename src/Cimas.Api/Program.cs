@@ -1,6 +1,5 @@
 using Cimas.Application;
 using Cimas.Infrastructure;
-using Mapster;
 
 namespace Cimas.Api
 {

@@ -5,12 +5,12 @@ using MediatR;
 
 namespace Cimas.Application.Features.Cinemas.Queries.GetAllCinemas
 {
-    public class GetAllCinemaQueryHandler : IRequestHandler<GetAllCinemaQuery, ErrorOr<List<Cinema>>>
+    public class GetAllCinemasQueryHandler : IRequestHandler<GetAllCinemasQuery, ErrorOr<List<Cinema>>>
     {
         private readonly IUnitOfWork _uow;
         private readonly ICustomUserManager _userManager;
 
-        public GetAllCinemaQueryHandler(
+        public GetAllCinemasQueryHandler(
             IUnitOfWork uow,
             ICustomUserManager userManager)
         {
@@ -18,7 +18,7 @@ namespace Cimas.Application.Features.Cinemas.Queries.GetAllCinemas
             _userManager = userManager;
         }
 
-        public async Task<ErrorOr<List<Cinema>>> Handle(GetAllCinemaQuery query, CancellationToken cancellationToken)
+        public async Task<ErrorOr<List<Cinema>>> Handle(GetAllCinemasQuery query, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(query.UserId.ToString());
             if (user is null)

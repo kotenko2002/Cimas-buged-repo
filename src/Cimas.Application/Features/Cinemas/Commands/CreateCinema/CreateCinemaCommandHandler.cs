@@ -26,11 +26,6 @@ namespace Cimas.Application.Features.Cinemas.Commands.CreateCinema
                 return Error.NotFound(description: "User with such id does not exist");
             }
 
-            if (user.CompanyId == Guid.Empty)
-            {
-                return Error.Failure(description: "User is not linked to any company");
-            }
-
             var cinema = new Cinema()
             {
                 Id = Guid.NewGuid(),

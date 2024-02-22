@@ -26,11 +26,6 @@ namespace Cimas.Application.Features.Cinemas.Queries.GetAllCinemas
                 return Error.NotFound(description: "User with such id does not exist");
             }
 
-            if (user.CompanyId == Guid.Empty)
-            {
-                return Error.Failure(description: "User is not linked to any company");
-            }
-
             return await _uow.CinemaRepository.GetCinemasByCompanyIdAsync(user.CompanyId);
         }
     }

@@ -8,7 +8,7 @@ namespace Cimas.IntegrationTests.ControllersTests
 {
     public class CinemaControllerTest : BaseControllerTest
     {
-        private readonly string _baseUrl = "cinemas";
+        private const string _baseUrl = "cinemas";
 
         [Test]
         public Task CinemaController_CreateCinema_ShouldReturnOk()
@@ -23,9 +23,8 @@ namespace Cimas.IntegrationTests.ControllersTests
 
                 // Act
                 var response = await client.PostAsync($"{_baseUrl}", content);
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var cinemas = JsonConvert.DeserializeObject<GetCinemaResponse>(responseContent);
+                
+                var cinemas = await GetResponseContent<GetCinemaResponse>(response);
 
                 // Assert
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -43,9 +42,8 @@ namespace Cimas.IntegrationTests.ControllersTests
 
                 // Act
                 var response = await client.GetAsync($"{_baseUrl}/{cinema1Id}");
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var cinemas = JsonConvert.DeserializeObject<GetCinemaResponse>(responseContent);
+                
+                var cinemas = await GetResponseContent<GetCinemaResponse>(response);
 
                 // Assert
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -62,9 +60,8 @@ namespace Cimas.IntegrationTests.ControllersTests
 
                 // Act
                 var response = await client.GetAsync($"{_baseUrl}");
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var cinemas = JsonConvert.DeserializeObject<List<GetCinemaResponse>>(responseContent);
+                
+                var cinemas = await GetResponseContent<List<GetCinemaResponse>>(response);
 
                 // Assert
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));

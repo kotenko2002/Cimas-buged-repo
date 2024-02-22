@@ -17,6 +17,7 @@ using System.Data;
 using Cimas.Domain.Companies;
 using Cimas.Domain.Cinemas;
 using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace Cimas.IntegrationTests.ControllersTests
 {
@@ -84,6 +85,12 @@ namespace Cimas.IntegrationTests.ControllersTests
 
             string token = new JwtSecurityTokenHandler().WriteToken(accessToken);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        public async Task<T> GetResponseContent<T>(HttpResponseMessage response)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(responseContent);
         }
 
         private void SetUpInMemoryDb(IServiceCollection services)

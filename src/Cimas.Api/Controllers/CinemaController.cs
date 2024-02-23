@@ -96,7 +96,7 @@ namespace Cimas.Api.Controllers
             ErrorOr<Success> updateCinemaResult = await _mediator.Send(command);
 
             return updateCinemaResult.Match(
-                res => Ok(),
+                NoContent,
                 Problem
             );
         }
@@ -114,7 +114,7 @@ namespace Cimas.Api.Controllers
             ErrorOr<Success> deleteCinemaResult = await _mediator.Send(command);
 
             return deleteCinemaResult.Match(
-                res => Ok(),
+                NoContent,
                 Problem
             );
         }

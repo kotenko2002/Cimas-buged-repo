@@ -84,7 +84,7 @@ namespace Cimas.IntegrationTests.ControllersTests
                 var response = await client.PutAsync($"{_baseUrl}/{cinema1Id}", content);
 
                 // Assert
-                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
             });
         }
 
@@ -100,7 +100,7 @@ namespace Cimas.IntegrationTests.ControllersTests
                 var response = await client.DeleteAsync($"{_baseUrl}/{cinema1Id}");
 
                 // Assert
-                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
             });
         }
     }

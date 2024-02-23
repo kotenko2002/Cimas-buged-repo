@@ -4,5 +4,6 @@
         Guid CompanyId,
         string Username,
         string Password,
-        string Role);
+        string Role
+    );
 }

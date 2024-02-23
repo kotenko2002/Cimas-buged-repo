@@ -1,6 +1,8 @@
 ﻿using Mapster;
+using MapsterMapper;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
 namespace Cimas.Api
 {
@@ -15,7 +17,8 @@ namespace Cimas.Api
                 .AddEndpointsApiExplorer()
                 .AddSwagger()
                 .AddProblemDetails()
-                .AddMapster();
+                //.AddMapster();
+                .AddMapping();
 
             return services;
         }
@@ -34,6 +37,17 @@ namespace Cimas.Api
 
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
+        }
+
+        private static IServiceCollection AddMapping(this IServiceCollection services)
+        {
+            var config = TypeAdapterConfig.GlobalSettings;
+            config.Scan(Assembly.GetExecutingAssembly());
+
+            services.AddSingleton(config);
+            services.AddScoped<IMapper, ServiceMapper>();
+
+            return services;
         }
     }
 }

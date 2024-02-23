@@ -63,5 +63,8 @@ namespace Cimas.Api.Controllers
 
             return ValidationProblem(modelStateDictionary);
         }
+
+        protected IActionResult NoContent(Success success)
+            => NoContent();
     }
 }

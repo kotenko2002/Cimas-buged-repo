@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Cimas.Infrastructure\Cimas.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Mapping\" />
-  </ItemGroup>
-
 </Project>

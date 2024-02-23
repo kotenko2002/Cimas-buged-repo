@@ -43,7 +43,7 @@ namespace Cimas.Infrastructure.Repositories
             return await Sourse.ToListAsync();
         }
 
-        public async Task<TEntity> GetByIdAsync(Guid id)
+        public virtual async Task<TEntity> GetByIdAsync(Guid id)
         {
             return await Sourse.FindAsync(id);
         }

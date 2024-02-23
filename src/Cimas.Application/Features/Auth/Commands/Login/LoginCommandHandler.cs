@@ -11,11 +11,11 @@ namespace Cimas.Application.Features.Auth.Commands.Login
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<TokensPair>>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly ICustomUserManager _userManager;
         private readonly IJwtTokensService _jwtTokensService;
 
         public LoginCommandHandler(
-            UserManager<User> userManager,
+            ICustomUserManager userManager,
             IJwtTokensService jwtTokensService)
         {
             _userManager = userManager;
@@ -45,7 +45,6 @@ namespace Cimas.Application.Features.Auth.Commands.Login
             var authClaims = new List<Claim>
             {
                 new Claim("userId", user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 

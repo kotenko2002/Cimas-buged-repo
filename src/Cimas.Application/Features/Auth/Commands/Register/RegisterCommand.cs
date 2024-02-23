@@ -7,5 +7,6 @@ namespace Cimas.Application.Features.Auth.Commands.Register
         Guid CompanyId,
         string Username,
         string Password,
-        string Role) : IRequest<ErrorOr<Success>>;
+        string Role
+    ) : IRequest<ErrorOr<Success>>;
 }
